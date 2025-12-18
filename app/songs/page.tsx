@@ -101,14 +101,14 @@ export default function SongsPage() {
           <h2 className="text-3xl font-bold">
             {searchQuery.trim() ? "Search Results" : "Discover Music"}
           </h2>
-          <div className="flex gap-2">
+          {/* <div className="flex gap-2">
             <SpotifyImport />
             {!showPlaylistForm ? (
               <Button onClick={() => setShowPlaylistForm(true)}>
                 + New Playlist
               </Button>
             ) : null}
-          </div>
+          </div> */}
         </div>
 
         {/* Search Bar */}
