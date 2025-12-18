@@ -77,15 +77,8 @@ export default function SongsPage() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div>Loading...</div>
-        </div>
-      </div>
-    );
+  if (loading || songsLoading) {
+    return <div>Loading...</div>;
   }
 
   if (!user) {
@@ -101,14 +94,13 @@ export default function SongsPage() {
           <h2 className="text-3xl font-bold">
             {searchQuery.trim() ? "Search Results" : "Discover Music"}
           </h2>
-          {/* <div className="flex gap-2">
-            <SpotifyImport />
+          <div className="flex gap-2">
             {!showPlaylistForm ? (
               <Button onClick={() => setShowPlaylistForm(true)}>
                 + New Playlist
               </Button>
             ) : null}
-          </div> */}
+          </div>
         </div>
 
         {/* Search Bar */}
