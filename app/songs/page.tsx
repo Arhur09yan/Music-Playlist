@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/lib/auth-context";
-import { useSongs, useLikeSong } from "@/lib/hooks/use-songs";
+import { useSongs, useLikeSong, useUnlikeSong } from "@/lib/hooks/use-songs";
 import { useSearch } from "@/lib/hooks/use-search";
 import {
   useCreatePlaylist,
@@ -32,6 +32,7 @@ export default function SongsPage() {
   const { data: searchResults = [], isLoading: isSearching } =
     useSearch(searchQuery);
   const likeSongMutation = useLikeSong();
+  const unlikeSongMutation = useUnlikeSong();
   const createPlaylistMutation = useCreatePlaylist();
   const addSongToPlaylistMutation = useAddSongToPlaylist();
 
@@ -47,9 +48,19 @@ export default function SongsPage() {
 
   const handleLikeSong = async (songId: string) => {
     try {
-      await likeSongMutation.mutateAsync(songId);
+      // Find the song to check its current liked status
+      const song = displaySongs.find((s: any) => String(s.id) === songId);
+      const isCurrentlyLiked = song?.liked === true;
+
+      if (isCurrentlyLiked) {
+        // If liked, call DELETE to unlike
+        await unlikeSongMutation.mutateAsync(songId);
+      } else {
+        // If not liked, call POST to like
+        await likeSongMutation.mutateAsync(songId);
+      }
     } catch (err) {
-      console.error("Failed to like song:", err);
+      console.error("Failed to toggle like:", err);
     }
   };
 
@@ -165,11 +176,14 @@ export default function SongsPage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-24">
               {displaySongs.map((song: any) => {
+                const songId = String(song.id);
+                // Use the liked property from the song object itself
+                const isLiked = song.liked === true;
                 return (
                   <SongCard
                     key={song.id}
                     song={{
-                      id: String(song.id),
+                      id: songId,
                       title: song.title,
                       artist: song.artist,
                       album: song.album || "",
@@ -182,8 +196,8 @@ export default function SongsPage() {
                         ? String(song.album_id)
                         : undefined,
                     }}
-                    isLiked={false}
-                    onLike={() => handleLikeSong(String(song.id))}
+                    isLiked={isLiked}
+                    onLike={() => handleLikeSong(songId)}
                   />
                 );
               })}

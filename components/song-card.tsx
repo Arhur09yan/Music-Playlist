@@ -99,10 +99,14 @@ export function SongCard({
                 e.stopPropagation();
                 onLike();
               }}
-              className={isLiked ? "bg-destructive" : ""}
+              className={
+                isLiked
+                  ? "bg-destructive cursor-pointer text-white hover:bg-destructive/90"
+                  : "hover:bg-accent cursor-pointer"
+              }
               aria-label={isLiked ? "Unlike song" : "Like song"}
             >
-              ♥
+              <span className="text-lg text-white cursor-pointer">♥</span>
             </Button>
           )}
           {onAddToPlaylist && (

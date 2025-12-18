@@ -13,9 +13,6 @@ export function useSongs(skip = 0, limit = 20) {
       console.log("Songs fetched:", data);
       return data;
     },
-    onError: (error) => {
-      console.error("Error fetching songs:", error);
-    },
   });
 }
 
@@ -38,9 +35,13 @@ export function useLikeSong() {
       }
       return apiClient.likeSong(songId);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["songs"] });
-      queryClient.invalidateQueries({ queryKey: ["likes"] });
+    onSuccess: async () => {
+      // Refetch songs data to get updated liked status from server
+      await queryClient.refetchQueries({ queryKey: ["songs"] });
+      // Refetch likes data to add the song to likes
+      await queryClient.refetchQueries({ queryKey: ["likes"] });
+      // Refetch search results if any
+      await queryClient.refetchQueries({ queryKey: ["search"] });
     },
   });
 }
@@ -56,9 +57,13 @@ export function useUnlikeSong() {
       }
       return apiClient.unlikeSong(songId);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["songs"] });
-      queryClient.invalidateQueries({ queryKey: ["likes"] });
+    onSuccess: async () => {
+      // Refetch songs data to get updated liked status from server
+      await queryClient.refetchQueries({ queryKey: ["songs"] });
+      // Refetch likes data to remove the song from likes
+      await queryClient.refetchQueries({ queryKey: ["likes"] });
+      // Refetch search results if any
+      await queryClient.refetchQueries({ queryKey: ["search"] });
     },
   });
 }
