@@ -84,7 +84,7 @@ export default function SongsPage() {
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl font-bold">Discover Music</h2>
           <div className="flex gap-2">
-            <SpotifyImport />
+            {/* <SpotifyImport /> */}
             {!showPlaylistForm ? (
               <Button onClick={() => setShowPlaylistForm(true)}>
                 + New Playlist
