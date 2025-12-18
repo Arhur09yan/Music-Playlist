@@ -51,12 +51,6 @@ export function Header() {
           >
             Likes
           </Link>
-          <Link
-            href="/search"
-            className="text-foreground hover:text-primary font-medium"
-          >
-            Search
-          </Link>
         </nav>
 
         <div className="flex items-center gap-3">

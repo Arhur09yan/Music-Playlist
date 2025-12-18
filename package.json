@@ -6,7 +6,8 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start",
+    "postinstall": "npm rebuild lightningcss --platform=linux --arch=x64 || echo 'LightningCSS rebuild skipped'"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -64,6 +65,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.9",
+    "lightningcss": "^1.27.0",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
