@@ -228,6 +228,28 @@ export const apiClient = {
     return res.json();
   },
 
+  async getLikes(skip = 0, limit = 20) {
+    const token = getAuthToken();
+    if (!token) {
+      throw new Error("You must be logged in to view likes");
+    }
+
+    const res = await authenticatedFetch(
+      `${API_BASE}/likes?skip=${skip}&limit=${limit}`,
+      {
+        headers: createHeaders(),
+      }
+    );
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({}));
+      if (res.status === 401) {
+        throw new Error("Authentication required. Please log in again.");
+      }
+      throw new Error(error.detail || error.message || "Failed to fetch likes");
+    }
+    return res.json();
+  },
+
   // Playlists
   async getPlaylists(skip = 0, limit = 20) {
     const token = getAuthToken();

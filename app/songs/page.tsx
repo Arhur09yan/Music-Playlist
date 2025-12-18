@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Header } from "@/components/header";
 import { SongCard } from "@/components/song-card";
+import { SpotifyImport } from "@/components/spotify-import";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -79,13 +80,22 @@ export default function SongsPage() {
       <Header />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header Actions */}
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-3xl font-bold">Discover Music</h2>
+          <div className="flex gap-2">
+            <SpotifyImport />
+            {!showPlaylistForm ? (
+              <Button onClick={() => setShowPlaylistForm(true)}>
+                + New Playlist
+              </Button>
+            ) : null}
+          </div>
+        </div>
+
         {/* Create Playlist Section */}
-        <div className="mb-8">
-          {!showPlaylistForm ? (
-            <Button onClick={() => setShowPlaylistForm(true)}>
-              + New Playlist
-            </Button>
-          ) : (
+        {showPlaylistForm && (
+          <div className="mb-8">
             <div className="flex gap-2">
               <Input
                 placeholder="Playlist name..."
@@ -110,12 +120,11 @@ export default function SongsPage() {
                 Cancel
               </Button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Songs Grid */}
         <section>
-          <h2 className="text-3xl font-bold mb-6">Discover Music</h2>
           {songs.length === 0 ? (
             <p className="text-muted-foreground">No songs available</p>
           ) : (

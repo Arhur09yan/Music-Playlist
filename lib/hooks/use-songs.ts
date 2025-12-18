@@ -40,6 +40,7 @@ export function useLikeSong() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["songs"] });
+      queryClient.invalidateQueries({ queryKey: ["likes"] });
     },
   });
 }
@@ -57,6 +58,7 @@ export function useUnlikeSong() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["songs"] });
+      queryClient.invalidateQueries({ queryKey: ["likes"] });
     },
   });
 }

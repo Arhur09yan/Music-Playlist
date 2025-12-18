@@ -10,6 +10,7 @@ export function useImportSongFromSpotify() {
     mutationFn: (query: string) => apiClient.importSongFromSpotify(query),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["songs"] });
+      queryClient.invalidateQueries({ queryKey: ["albums"] });
     },
   });
 }
@@ -22,6 +23,7 @@ export function useImportSongsFromSpotify() {
       apiClient.importSongsFromSpotify(query, limit),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["songs"] });
+      queryClient.invalidateQueries({ queryKey: ["albums"] });
     },
   });
 }

@@ -5,6 +5,7 @@ import { useAlbums } from "@/lib/hooks/use-albums";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Header } from "@/components/header";
+import { SpotifyImport } from "@/components/spotify-import";
 import { Button } from "@/components/ui/button";
 
 export default function AlbumsPage() {
@@ -33,6 +34,7 @@ export default function AlbumsPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-3xl font-bold">Albums</h2>
+          <SpotifyImport />
         </div>
 
         {albums.length === 0 ? (

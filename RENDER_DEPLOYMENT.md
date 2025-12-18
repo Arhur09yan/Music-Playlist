@@ -108,8 +108,8 @@ Click **"Create Web Service"** and wait for deployment.
 - **Branch**: `main` (or your default branch)
 - **Root Directory**: `.` (root of repository)
 - **Runtime**: `Node`
-- **Build Command**: `npm install && npm run build`
-- **Start Command**: `npm start`
+- **Build Command**: `pnpm install && pnpm run build`
+- **Start Command**: `pnpm start`
 
 **Environment Variables:**
 Add these in the Render dashboard:
@@ -120,7 +120,7 @@ NEXT_PUBLIC_BACKEND_URL=https://music-api.onrender.com/api/v1
 # OR
 NEXT_PUBLIC_API_URL=https://music-api.onrender.com/api/v1
 
-# Node Environment
+# Node Environment (IMPORTANT: Must be exactly "production" - no typos or extra spaces)
 NODE_ENV=production
 ```
 
@@ -128,6 +128,8 @@ NODE_ENV=production
 
 - Replace `https://music-api.onrender.com` with your actual backend URL
 - The `NEXT_PUBLIC_` prefix makes these variables available in the browser
+- **CRITICAL**: Ensure `NODE_ENV` is set to exactly `production` (not `development` or any other value)
+- **CRITICAL**: Use `pnpm start` (not `pnpm run dev`) for the Start Command in production
 
 ### 3.3 Deploy Frontend
 
@@ -225,6 +227,23 @@ NODE_ENV=production
 2. **Build Failures**
    - Check Node version compatibility
    - Ensure all dependencies are in `package.json`
+
+3. **NODE_ENV Warning**
+   - Error: `⚠ You are using a non-standard "NODE_ENV" value`
+   - **Solution**: Ensure `NODE_ENV` is set to exactly `production` (case-sensitive, no extra spaces)
+   - Check in Render dashboard: Environment → Verify `NODE_ENV=production`
+   - **DO NOT** use `development`, `dev`, `prod`, or any other value
+
+4. **baseline-browser-mapping Warning**
+   - Warning: `The data in this module is over two months old`
+   - **Solution**: This is now included in `package.json` devDependencies
+   - Run `pnpm install` to update it
+   - This is a non-critical warning and won't affect functionality
+
+5. **TypeScript Configuration Warning**
+   - Next.js may suggest adding `.next/dev/types/**/*.ts` to tsconfig.json
+   - **Solution**: This is already included in the project's `tsconfig.json`
+   - The warning can be safely ignored
 
 ### General Issues
 

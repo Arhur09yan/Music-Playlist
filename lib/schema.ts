@@ -55,6 +55,6 @@ export interface Like {
 // Table schema definitions
 export const users = "users";
 export const songs = "songs";
+export const albums = "albums";
 export const playlists = "playlists";
-export const playlistSongs = "playlist_songs";
 export const likes = "likes";
