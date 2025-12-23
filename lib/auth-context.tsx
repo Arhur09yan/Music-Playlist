@@ -11,6 +11,7 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, name: string, password: string) => Promise<void>;
+  setAuthFromResult: (result: { token: string; refreshToken?: string; user: User }) => void;
   logout: () => void;
 }
 
@@ -75,6 +76,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("auth-user", JSON.stringify(user));
   };
 
+  const setAuthFromResult = (result: { token: string; refreshToken?: string; user: User }) => {
+    setToken(result.token);
+    setUser(result.user);
+    localStorage.setItem("auth-token", result.token);
+    if (result.refreshToken) {
+      localStorage.setItem("refresh-token", result.refreshToken);
+    }
+    localStorage.setItem("auth-user", JSON.stringify(result.user));
+  };
+
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -85,7 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, loading, login, register, logout }}
+      value={{ user, token, loading, login, register, setAuthFromResult, logout }}
     >
       {children}
     </AuthContext.Provider>

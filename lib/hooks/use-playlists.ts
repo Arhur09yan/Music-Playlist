@@ -78,3 +78,14 @@ export function useRemoveSongFromPlaylist() {
     },
   });
 }
+
+export function useDeletePlaylist() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (playlistId: string) => apiClient.deletePlaylist(playlistId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["playlists"] });
+    },
+  });
+}

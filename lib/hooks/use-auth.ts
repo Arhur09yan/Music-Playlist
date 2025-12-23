@@ -24,7 +24,7 @@ export function useLogin() {
 }
 
 export function useRegister() {
-  const { register: setAuth } = useAuthContext();
+  const { setAuthFromResult } = useAuthContext();
 
   return useMutation({
     mutationFn: async ({
@@ -37,8 +37,7 @@ export function useRegister() {
       password: string;
     }) => {
       const result = await apiClient.register(email, name, password);
-      // Update auth context with the result (this handles localStorage)
-      await setAuth(email, name, password);
+      setAuthFromResult(result);
       return result;
     },
   });

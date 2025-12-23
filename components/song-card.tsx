@@ -1,9 +1,7 @@
 "use client";
 
 import type { Song } from "@/lib/schema";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/lib/auth-context";
 import { useMusicPlayer } from "@/lib/music-player-context";
 import { useToast } from "@/hooks/use-toast";
 import { Play } from "lucide-react";
@@ -22,10 +20,8 @@ export function SongCard({
   isLiked = false,
   onAddToPlaylist,
 }: SongCardProps) {
-  const { token } = useAuth();
   const { playSong, currentSong, isPlaying } = useMusicPlayer();
   const { toast } = useToast();
-  const [showPlaylistMenu, setShowPlaylistMenu] = useState(false);
 
   const formatDuration = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -33,14 +29,9 @@ export function SongCard({
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  // Check if song has a playable preview URL (not just any URL)
+  // Check if song has any playable URL (be more lenient)
   const hasPreview = !!(
-    song.local_file_path ||
-    (song.url &&
-      (song.url.includes("preview") ||
-        song.url.includes("p.scdn.co") ||
-        song.url.endsWith(".mp3") ||
-        song.url.includes(".mp3")))
+    (song.local_file_path || song.url || song.id) // If song has an ID, we can try the streaming endpoint
   );
 
   const handlePlay = () => {
@@ -115,7 +106,7 @@ export function SongCard({
               variant="secondary"
               onClick={(e) => {
                 e.stopPropagation();
-                setShowPlaylistMenu(!showPlaylistMenu);
+                onAddToPlaylist();
               }}
               aria-label="Add to playlist"
             >

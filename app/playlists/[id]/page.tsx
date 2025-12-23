@@ -4,6 +4,7 @@ import { useAuth } from "@/lib/auth-context";
 import {
   usePlaylist,
   useRemoveSongFromPlaylist,
+  useDeletePlaylist,
 } from "@/lib/hooks/use-playlists";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect } from "react";
@@ -20,6 +21,7 @@ export default function PlaylistDetailPage() {
   const { data: playlist, isLoading: playlistLoading } =
     usePlaylist(playlistId);
   const removeSongMutation = useRemoveSongFromPlaylist();
+  const deletePlaylistMutation = useDeletePlaylist();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -35,6 +37,15 @@ export default function PlaylistDetailPage() {
       });
     } catch (err) {
       console.error("Failed to remove song:", err);
+    }
+  };
+
+  const handleDeletePlaylist = async () => {
+    try {
+      await deletePlaylistMutation.mutateAsync(playlistId);
+      router.push("/playlists");
+    } catch (err) {
+      console.error("Failed to delete playlist:", err);
     }
   };
 
@@ -55,13 +66,18 @@ export default function PlaylistDetailPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Playlist Header */}
         <div className="mb-8">
-          <Button
-            variant="outline"
-            onClick={() => router.back()}
-            className="mb-4"
-          >
-            ← Back
-          </Button>
+          <div className="flex items-center gap-2 mb-4">
+            <Button variant="outline" onClick={() => router.back()}>
+              ← Back
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeletePlaylist}
+              disabled={deletePlaylistMutation.isPending}
+            >
+              Delete playlist
+            </Button>
+          </div>
           <div className="flex gap-6 items-start">
             <div className="w-32 h-32 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
               <span className="text-5xl text-white">♪</span>

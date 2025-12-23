@@ -329,6 +329,21 @@ export const apiClient = {
     };
   },
 
+  async deletePlaylist(id: string) {
+    const res = await authenticatedFetch(`${API_BASE}/playlists/${id}`, {
+      method: "DELETE",
+      headers: createHeaders(),
+    });
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({}));
+      throw new Error(
+        error.detail || error.message || "Failed to delete playlist"
+      );
+    }
+    // Some backends may return an empty body on DELETE
+    return res.json().catch(() => ({}));
+  },
+
   async addSongToPlaylist(playlistId: string, songId: string) {
     const res = await authenticatedFetch(
       `${API_BASE}/playlists/${playlistId}/songs/${songId}`,
